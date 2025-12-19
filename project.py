@@ -1,22 +1,24 @@
 import json
 from sysadmin.myshell import run
+from myos.cloud import Cloud
 
 
 class Project:
-    def __init__(self, project_id=None, name=None):
+    def __init__(self, project_id=None, name=None, cloud=Cloud()):
         self._id = None
         self._name = None
         if project_id:
             self._id = project_id
         if name:
             self._name = name
+        self._cloud = cloud
         self._data_d = {}
 
     def _get_data(self):
         if self._name:
-            cmd = f'openstack --os-cloud admin project show "{self._name}" -f json'
+            cmd = f'openstack --os-cloud {self._cloud.cloud} project show "{self._name}" -f json'
         else:
-            cmd = f'openstack --os-cloud admin project show {self._id} -f json'
+            cmd = f'openstack --os-cloud {self._cloud.cloud} project show {self._id} -f json'
         results = run(cmd)
         self._data_d = json.loads(results.out)
 
@@ -75,7 +77,7 @@ class Project:
         | 23c7d1b6-ff4c-405b-b71c-42060ab22312 | force-live-control-plane-bk6dl    | ACTIVE | portal-internal=192.168.3.231 |       | l3.micro | 5b37be0037c94b69a35e72cb2da8b016 |
         +--------------------------------------+-----------------------------------+--------+-------------------------------+-------+----------+----------------------------------+
 
-        $ openstack --os-cloud admin server list --project Condor --format json
+        $ openstack --os-cloud {self._cloud.cloud} server list --project Condor --format json
         [
           {
             "ID": "e2951a59-e290-430f-8f12-1fa4168c3024",
@@ -94,7 +96,7 @@ class Project:
           ...
         """
         from myos.server import Server
-        cmd = f'openstack --os-cloud admin server list --project {self.name} --format json'
+        cmd = f'openstack --os-cloud {self._cloud.cloud} server list --project {self.name} --format json'
         results = run(cmd)
         servers_l = json.loads(results.out)
         out = []
@@ -124,7 +126,7 @@ class Project:
         ]
         """
         from myos.user import User
-        cmd = f'openstack --os-cloud admin role assignment list --project lsst-drp --names --format json'
+        cmd = f'openstack --os-cloud {self._cloud.cloud} role assignment list --project lsst-drp --names --format json'
         results = run(cmd)
         users_l = json.loads(results.out)
         out = []

@@ -1,22 +1,24 @@
 import json
 from sysadmin.myshell import run
+from myos.cloud import Cloud
 
 class Hypervisor:
-    def __init__(self, hypervisor_id=None, hostname=None):
+    def __init__(self, hypervisor_id=None, hostname=None, cloud=Cloud()):
         self._id = None
         self._hostname = None
         if hypervisor_id:
             self._id = hypervisor_id
         if hostname:
             self._hostname = hostname
+        self._cloud = cloud
         self._data_d = {}
 
 
     def _get_data(self):
         if self._hostname:
-            cmd = f'openstack --os-cloud admin hypervisor show {self._hostname} --format json'
+            cmd = f'openstack --os-cloud {self._cloud.cloud} hypervisor show {self._hostname} --format json'
         if self._id:
-            cmd = f'openstack --os-cloud admin hypervisor show {self._id} --format json'
+            cmd = f'openstack --os-cloud {self._cloud.cloud} hypervisor show {self._id} --format json'
         results = run(cmd)
         self._data_d = json.loads(results.out)
 
@@ -86,7 +88,7 @@ class Hypervisor:
         ]
         """
         from myos.server import Server
-        cmd = f'openstack --os-cloud admin server list --host {self.hostname} --all-projects --format json'
+        cmd = f'openstack --os-cloud {self._cloud.cloud} server list --host {self.hostname} --all-projects --format json'
         results = run(cmd)
         servers_l = json.loads(results.out)
         out = []

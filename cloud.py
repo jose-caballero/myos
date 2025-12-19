@@ -2,7 +2,7 @@ import json
 from sysadmin.myshell import run
 
 class Cloud:
-    def __init__(self, cloud):
+    def __init__(self, cloud="admin"):
         self.cloud = cloud
 
     @property

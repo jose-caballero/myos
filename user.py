@@ -3,10 +3,11 @@ from sysadmin.myshell import run
 
 from myos.project import Project
 from myos.domain import Domain
+from myos.cloud import Cloud
 
 
 class User:
-    def __init__(self, user_id=None, name=None):
+    def __init__(self, user_id=None, name=None, cloud=Cloud()):
         self._id = None
         self._name = None
         self._domain = None
@@ -21,19 +22,20 @@ class User:
                 # we assume then that the default value is stfc
                 domain_name = 'stfc'
             self._domain = Domain(name=domain_name)
+        self._cloud = cloud
         self._data_d = {}
 
 
     def _get_data(self):
         if self._name:
-            cmd = f'openstack --os-cloud admin user show {self._name} --domain {self._domain.name} -f json'
+            cmd = f'openstack --os-cloud {self._cloud.cloud} user show {self._name} --domain {self._domain.name} -f json'
         if self._id:
-            cmd = f'openstack --os-cloud admin user show {self._id} -f json'
+            cmd = f'openstack --os-cloud {self._cloud.cloud} user show {self._id} -f json'
         results = run(cmd)
         self._data_d = json.loads(results.out)
 
 #    def _get_id_from_name(self, name):
-#        cmd = f'openstack --os-cloud admin user list --domain stfc --long -f value -c ID -c Name | grep -w {name}'
+#        cmd = f'openstack --os-cloud {self._cloud.cloud} user list --domain stfc --long -f value -c ID -c Name | grep -w {name}'
 #        results = run(cmd)
 #        # results is <ID> <email>, we only need the ID 
 #        user_id = results.out.split()[0]
@@ -100,7 +102,7 @@ class User:
         # 
         # FIXME this is not working fine
         #
-        cmd = f'openstack --os-cloud admin role assignment list --user {self.name} --names --user-domain {self.domain.name} --format json'
+        cmd = f'openstack --os-cloud {self._cloud.cloud} role assignment list --user {self.name} --names --user-domain {self.domain.name} --format json'
         results = run(cmd)
         projects_l  = json.loads(results.out)
         # output is like this
@@ -139,7 +141,7 @@ class User:
         """
         from my.server import Server
         out = []
-        cmd = f'openstack --os-cloud admin server list --user {self.name} --user-domain {self.domain.name} --all-projects --format json'
+        cmd = f'openstack --os-cloud {self._cloud.cloud} server list --user {self.name} --user-domain {self.domain.name} --all-projects --format json'
         # 
         # output looks like this
         #

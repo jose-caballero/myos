@@ -1,23 +1,25 @@
 import json
 from sysadmin.myshell import run
+from myos.cloud import Cloud
 
 
 class Domain:
-    def __init__(self, domain_id=None, name=None):
+    def __init__(self, domain_id=None, name=None, cloud=Cloud()):
         self._id = None
         self._name = None
         if domain_id:
             self._id = domain_id
         if name:
             self._name = name
+        self._cloud = cloud
         self._data_d = {}
 
 
     def _get_data(self):
         if self._name:
-            cmd = f'openstack --os-cloud admin domain show {self._name} -f json'
+            cmd = f'openstack --os-cloud {self._cloud.cloud} domain show {self._name} -f json'
         if self._id:
-            cmd = f'openstack --os-cloud admin domain show {self._id} -f json'
+            cmd = f'openstack --os-cloud {self._cloud.cloud} domain show {self._id} -f json'
         results = run(cmd)
         self._data_d = json.loads(results.out)
 
@@ -64,7 +66,7 @@ class Domain:
         ]
         """
         from myos.project import Project
-        cmd = f'openstack --os-cloud admin project list --domain {self.name} --format json'
+        cmd = f'openstack --os-cloud {self._cloud.cloud} project list --domain {self.name} --format json'
         results = run(cmd)
         out = []
         projects = json.loads(results.out)
@@ -93,7 +95,7 @@ class Domain:
         ]
         """
         from myos.user import User
-        cmd = f'openstack --os-cloud admin user list --domain {self.name} --format json'
+        cmd = f'openstack --os-cloud {self._cloud.cloud} user list --domain {self.name} --format json'
         results = run(cmd)
         out = []
         users = json.loads(results.out)

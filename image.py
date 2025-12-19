@@ -1,22 +1,24 @@
 import json
 from sysadmin.myshell import run
+from myos.cloud import Cloud
 
 class Image:
-    def __init__(self, image_id=None, name=None):
+    def __init__(self, image_id=None, name=None, cloud=Cloud()):
         self._id = None
         self._name = None
         if image_id:
             self._id = image_id
         if name:
             self._name = name
+        self._cloud = cloud
         self._data_d = {}
 
 
     def _get_data(self):
         if self._name:
-            cmd = f'openstack --os-cloud admin image show {self._name} -f json'
+            cmd = f'openstack --os-cloud {self._cloud.cloud} image show {self._name} -f json'
         if self._id:
-            cmd = f'openstack --os-cloud admin image show {self._id} -f json'
+            cmd = f'openstack --os-cloud {self._cloud.cloud} image show {self._id} -f json'
         results = run(cmd)
         self._data_d = json.loads(results.out)
 
@@ -63,7 +65,7 @@ class Image:
         ]
         """
         from myos.server import Server
-        cmd = f'openstack --os-cloud admin server list --image {self.name} --all-projects --format json --column ID'
+        cmd = f'openstack --os-cloud {self._cloud.cloud} server list --image {self.name} --all-projects --format json --column ID'
         results = run(cmd)
         servers_l = json.loads(results.out)
         out = []

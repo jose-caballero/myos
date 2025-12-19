@@ -1,5 +1,6 @@
 import json
 from sysadmin.myshell import run
+from myos.cloud import Cloud
 
 #  
 #  $ openstack --os-cloud admin flavor show l3.micro --format json
@@ -49,21 +50,22 @@ from sysadmin.myshell import run
 
 
 class Flavor:
-    def __init__(self, flavor_id=None, name=None):
+    def __init__(self, flavor_id=None, name=None, cloud=Cloud()):
         self._id = None
         self._name = None
         if flavor_id:
             self._id = flavor_id
         if name:
             self._name = name
+        self._cloud = cloud
         self._data_d = {}
 
 
     def _get_data(self):
         if self._name:
-            cmd = f'openstack --os-cloud admin flavor show {self._name} -f json'
+            cmd = f'openstack --os-cloud {self._cloud.cloud} flavor show {self._name} -f json'
         if self._id:
-            cmd = f'openstack --os-cloud admin flavor show {self._id} -f json'
+            cmd = f'openstack --os-cloud {self._cloud.cloud} flavor show {self._id} -f json'
         results = run(cmd)
         self._data_d = json.loads(results.out)
 
@@ -140,7 +142,7 @@ class Flavor:
         ]
         """
         from myos.server import Server
-        cmd = f'openstack --os-cloud admin server list --flavor {self.name} --all-projects --format json --column ID'
+        cmd = f'openstack --os-cloud {self._cloud.cloud} server list --flavor {self.name} --all-projects --format json --column ID'
         results = run(cmd)
         servers_l = json.loads(results.out)
         out = []

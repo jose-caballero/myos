@@ -1,22 +1,24 @@
 import json
 from sysadmin.myshell import run
+from myos.cloud import Cloud
 
 class Server:
-    def __init__(self, server_id=None, name=None):
+    def __init__(self, server_id=None, name=None, cloud=Cloud()):
         self._id = None
         self._name = None
         if server_id:
             self._id = server_id
         if name:
             self._name = name
+        self._cloud = cloud
         self._data_d = {}
 
 
     def _get_data(self):
         if self._name:
-            cmd = f'openstack --os-cloud admin server show {self._name} -f json'
+            cmd = f'openstack --os-cloud {self._cloud.cloud} server show {self._name} -f json'
         if self._id:
-            cmd = f'openstack --os-cloud admin server show {self._id} -f json'
+            cmd = f'openstack --os-cloud {self._cloud.cloud} server show {self._id} -f json'
         results = run(cmd)
         self._data_d = json.loads(results.out)
 
