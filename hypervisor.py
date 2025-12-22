@@ -3,20 +3,20 @@ from sysadmin.myshell import run
 from myos.cloud import Cloud
 
 class Hypervisor:
-    def __init__(self, hypervisor_id=None, hostname=None, cloud=Cloud()):
+    def __init__(self, hypervisor_id=None, name=None, cloud=Cloud()):
         self._id = None
-        self._hostname = None
+        self._name = None
         if hypervisor_id:
             self._id = hypervisor_id
-        if hostname:
-            self._hostname = hostname
+        if name:
+            self._name = name
         self._cloud = cloud
         self._data_d = {}
 
 
     def _get_data(self):
-        if self._hostname:
-            cmd = f'openstack --os-cloud {self._cloud.cloud} hypervisor show {self._hostname} --format json'
+        if self._name:
+            cmd = f'openstack --os-cloud {self._cloud.cloud} hypervisor show {self._name} --format json'
         if self._id:
             cmd = f'openstack --os-cloud {self._cloud.cloud} hypervisor show {self._id} --format json'
         results = run(cmd)
@@ -28,11 +28,19 @@ class Hypervisor:
         """
         returns the hostname associated to this Hypervisor
         """
-        if not self._hostname:
+        if not self._name:
             self._get_data()
             return self._data_d['hypervisor_hostname']
         else:
-            return self._hostname
+            return self._name
+
+    @property
+    def name(self):
+        """
+        returns the hostname associated to this Hypervisor
+        name and hostname are the same thing for this class
+        """
+        return self.hostname
 
     @property
     def id(self):
@@ -88,7 +96,7 @@ class Hypervisor:
         ]
         """
         from myos.server import Server
-        cmd = f'openstack --os-cloud {self._cloud.cloud} server list --host {self.hostname} --all-projects --format json'
+        cmd = f'openstack --os-cloud {self._cloud.cloud} server list --host {self.name} --all-projects --format json'
         results = run(cmd)
         servers_l = json.loads(results.out)
         out = []
@@ -99,8 +107,8 @@ class Hypervisor:
 
 
 if __name__ == '__main__':
-    hv = Hypervisor(hostname='hv300.nubes.rl.ac.uk')
-    hv = Hypervisor(hostname='hv-a100x8-8.nubes.rl.ac.uk')
+    hv = Hypervisor(name='hv300.nubes.rl.ac.uk')
+    hv = Hypervisor(name='hv-a100x8-8.nubes.rl.ac.uk')
     print(hv.id)
     print(hv.status)
     print(hv.state)
