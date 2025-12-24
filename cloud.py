@@ -1,5 +1,5 @@
 import json
-from sysadmin.myshell import run
+from myos.tools import run
 
 class Cloud:
     def __init__(self, cloud="admin"):

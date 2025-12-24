@@ -1,5 +1,5 @@
 import json
-from sysadmin.myshell import run
+from myos.tools import run
 from myos.cloud import Cloud
 
 class Server:

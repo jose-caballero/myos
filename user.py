@@ -1,5 +1,5 @@
 import json
-from sysadmin.myshell import run
+from myos.tools import run
 
 from myos.project import Project
 from myos.domain import Domain
