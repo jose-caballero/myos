@@ -29,7 +29,7 @@ class FloatingIP:
         """
         if not self._name:
             self._get_data()
-            return self._data_d['Floating IP Address']
+            return self._data_d['floating_ip_address']
         else:
             return self._name
 
@@ -60,7 +60,7 @@ class FloatingIP:
         """
         if not self._data_d:
             self._get_data()
-        return self._data_d['Fixed IP Address']
+        return self._data_d['fixed_ip_address']
 
     @property
     def port(self):
@@ -69,7 +69,7 @@ class FloatingIP:
         """
         if not self._data_d:
             self._get_data()
-        return self._data_d['Port']
+        return self._data_d['port_id']
 
     @property
     def project(self):
@@ -79,6 +79,6 @@ class FloatingIP:
         from myos.project import Project
         if not self._data_d:
             self._get_data()
-        project_id = self._data_d['Project']
+        project_id = self._data_d['project_id']
         return Project(project_id=project_id)
 

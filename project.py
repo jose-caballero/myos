@@ -126,7 +126,7 @@ class Project:
         ]
         """
         from myos.user import User
-        cmd = f'openstack --os-cloud {self._cloud.cloud} role assignment list --project lsst-drp --names --format json'
+        cmd = f'openstack --os-cloud {self._cloud.cloud} role assignment list --project {self.name} --names --format json'
         results = run(cmd)
         users_l = json.loads(results.out)
         out = []
@@ -135,15 +135,45 @@ class Project:
             out.append(User(name=user_name))
         return out
        
+    @property
+    def fips(self):
+        """
+        returns the list of Floating IPs in this Project
+
+        $ openstack --os-cloud admin floating ip list --project lsst-drp --format json
+        [
+          {
+            "ID": "3b90998e-ab39-45b4-b56e-120e00d31fdb",
+            "Floating IP Address": "130.246.83.113",
+            "Fixed IP Address": null,
+            "Port": null,
+            "Floating Network": "5283f642-8bd8-48b6-8608-fa3006ff4539",
+            "Project": "22547d0eef6445ff9febfedec9b4da4a"
+          }
+        ]        
+        """
+        from myos.ip import FloatingIP
+        cmd = f'openstack --os-cloud {self._cloud.cloud} floating ip list --project {self.name} --format json'
+        results = run(cmd)
+        fip_l = json.loads(results.out)
+        out = []
+        for fip in fip_l:
+            fip_id = fip['ID']
+            out.append(FloatingIP(fip_id=fip_id))
+        return out
+
 
 if __name__ == '__main__':
-    p = Project(name="Condor")
+    p = Project(name="lsst-drp")
     print(p.name)
     print(p.id)
-    ss = p.servers
-    for s in ss:
-        print(s.id)
-        print(s.name)
-    uu = p.users
-    for u in uu:
-        print(u.name)
+    #ss = p.servers
+    #for s in ss:
+    #    print(s.id)
+    #    print(s.name)
+    #uu = p.users
+    #for u in uu:
+    #    print(u.name)
+    fips = p.fips
+    print(fips[0].ip)
+
