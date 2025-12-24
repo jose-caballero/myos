@@ -65,6 +65,21 @@ class Cloud:
             out.append( Project(project_id=project_id) )
         return out
 
+    @property
+    def fips(self):
+        """
+        returns the entire list of FloatingIP objects for this cloud instance
+        """
+        from myos.ip import FloatingIP
+        cmd = f'openstack --os-cloud {self.cloud} floating ip list --format json'
+        results = run(cmd)
+        fip_l = json.loads(results.out)
+        out = []
+        for fip in fip_l:
+            fip_id = fip['ID']
+            out.append( FloatingIP(fip_id=fip_id) )
+        return out
+
 
 if __name__ == '__main__':
     cloud = Cloud("admin")
@@ -72,6 +87,8 @@ if __name__ == '__main__':
     #print(len(hv_l))
     #flavor_l = cloud.flavors
     #print(len(flavor_l))
-    image_l = cloud.images
-    print(len(image_l))
+    #image_l = cloud.images
+    #print(len(image_l))
+    fip_l = cloud.fips
+    print(len(fip_l))
 

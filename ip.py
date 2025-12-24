@@ -3,11 +3,11 @@ from sysadmin.myshell import run
 from myos.cloud import Cloud
 
 class FloatingIP:
-    def __init__(self, flating_ip_id=None, name=None, cloud=Cloud()):
+    def __init__(self, fip_id=None, name=None, cloud=Cloud()):
         self._id = None
         self._name = None
-        if floating_ip_id:
-            self._id = floating_ip_id
+        if fip_id:
+            self._id = fip_id
         if name:
             self._name = name
         self._cloud = cloud
@@ -45,7 +45,7 @@ class FloatingIP:
     @property
     def id(self):
         """
-        returns the floating_ip_id associated to this Floating IP
+        returns the FIP ID associated to this Floating IP
         """
         if not self._id:
             self._get_data()
