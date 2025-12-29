@@ -45,6 +45,19 @@ class Project:
             return self._id
 
     @property
+    def parent(self):
+        """
+        returns the parent Project associated to this Project
+        """
+        if not self._id:
+            self._get_data()
+        parent_id = self._data_d['parent_id']
+        if parent_id == None:
+            return None
+        else:
+            return Project(project_id=parent_id)
+
+    @property
     def tags(self):
         """
         returns the tags associated to this Project
