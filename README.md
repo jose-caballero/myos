@@ -159,6 +159,25 @@ Type "help", "copyright", "credits" or "license" for more information.
 'hv300.matrix.net'
 ```
 
+## owners of all VMs in a hypervisor
+
+```
+$ python
+Python 3.10.3 (v3.10.3:a342a49189, Mar 16 2022, 09:34:18) [Clang 13.0.0 (clang-1300.0.29.30)] on darwin
+Type "help", "copyright", "credits" or "license" for more information.
+
+>>> from myos.hypervisor import Hypervisor
+
+>>> hv = Hypervisor(name='hv1.matrix.net')
+>>> servers = hv.servers
+>>> for server in servers:
+...    print(server.name, server.id, server.user.name, server.user.id, server.user.email)
+...
+node1 fc3ca316-c59a-4604-abf7 neo e093655abf neo@matrix.net
+node2 ab3fff55-c00b-aa65-45ab trinity ad10f44b0d trinity@matrix.net
+```
+
+
 ## for a Cloud different than the admin one
 
 The default Cloud is `admin`. In case there is a need for a query under different credentials:
