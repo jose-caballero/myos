@@ -176,6 +176,30 @@ class Project:
         return out
 
 
+    ####################################
+    # BEGIN TEST 
+    ####################################
+
+    def add(self, entity):
+        from myos.user import User
+        if type(entity) is User:
+            self._add_user(entity)
+
+    def _add_user(self, user):
+        # example: 
+        #    openstack role add user 
+        #    --user 69669657eb53642a96b6a03cf27fb47b9fef0f863da0e5ca285c724c91c50e47 
+        #    --project f2ae44b03b3742d0808c6197b76b0e5e 
+        #    --user-domain stfc
+        cmd = f'openstack --os-cloud {self._cloud.cloud} role add user --user {user.id} --project {self.name} --user-domain {user.domain.name}'
+        results = run(cmd)
+
+    ####################################
+    # END TEST 
+    ####################################
+
+
+
 if __name__ == '__main__':
     p = Project(name="lsst-drp")
     print(p.name)
