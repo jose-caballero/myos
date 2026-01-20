@@ -7,22 +7,16 @@ from myos.cloud import Cloud
 
 
 class User:
-    def __init__(self, user_id=None, name=None, cloud=Cloud()):
+    def __init__(self, user_id=None, name=None, domain_name=None, cloud=Cloud()):
+        self._cloud = cloud
         self._id = None
         self._name = None
         self._domain = None
         if user_id:
             self._id = user_id
         if name:
-            self._name = name.split('@')[0]
-            try:
-                domain_name = name.split('@')[1]
-            except Exception as ex:
-                # there is no @ char in the username
-                # we assume then that the default value is stfc
-                domain_name = 'stfc'
+            self._name = name
             self._domain = Domain(name=domain_name)
-        self._cloud = cloud
         self._data_d = {}
 
 
@@ -33,13 +27,6 @@ class User:
             cmd = f'openstack --os-cloud {self._cloud.cloud} user show {self._id} -f json'
         results = run(cmd)
         self._data_d = json.loads(results.out)
-
-#    def _get_id_from_name(self, name):
-#        cmd = f'openstack --os-cloud {self._cloud.cloud} user list --domain stfc --long -f value -c ID -c Name | grep -w {name}'
-#        results = run(cmd)
-#        # results is <ID> <email>, we only need the ID 
-#        user_id = results.out.split()[0]
-#        return user_id
 
     @property
     def name(self):
