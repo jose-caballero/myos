@@ -1,6 +1,7 @@
 import json
 from myos.tools import run
 from myos.cloud import Cloud
+from myos.entitylist import EntityList
 
 
 class Project:
@@ -112,7 +113,7 @@ class Project:
         cmd = f'openstack --os-cloud {self._cloud.cloud} server list --project {self.name} --format json'
         results = run(cmd)
         servers_l = json.loads(results.out)
-        out = []
+        out = EntityList()
         for server in servers_l:
             server_id = server["ID"]
             out.append(Server(server_id=server_id))
@@ -142,7 +143,7 @@ class Project:
         cmd = f'openstack --os-cloud {self._cloud.cloud} role assignment list --project {self.name} --names --format json'
         results = run(cmd)
         users_l = json.loads(results.out)
-        out = []
+        out = EntityList()
         for user in users_l:
             user_name = user['User']
             out.append(User(name=user_name))
@@ -169,7 +170,7 @@ class Project:
         cmd = f'openstack --os-cloud {self._cloud.cloud} floating ip list --project {self.name} --format json'
         results = run(cmd)
         fip_l = json.loads(results.out)
-        out = []
+        out = EntityList()
         for fip in fip_l:
             fip_id = fip['ID']
             out.append(FloatingIP(fip_id=fip_id))

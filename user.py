@@ -4,6 +4,7 @@ from myos.tools import run
 from myos.project import Project
 from myos.domain import Domain
 from myos.cloud import Cloud
+from myos.entitylist import EntityList
 
 
 class User:
@@ -115,7 +116,7 @@ class User:
         #    }
         #  ]
         #
-        out = []
+        out = EntityList()
         for proj in projects_l:
             project_name = proj['Project'].split('@')[0]
             out.append(Project(name=project_name))
@@ -127,7 +128,6 @@ class User:
         returns all Servers created by this User
         """
         from my.server import Server
-        out = []
         cmd = f'openstack --os-cloud {self._cloud.cloud} server list --user {self.name} --user-domain {self.domain.name} --all-projects --format json'
         # 
         # output looks like this
@@ -166,6 +166,7 @@ class User:
         #
         results = run(cmd)
         servers_l  = json.loads(results.out)
+        out = EntityList()
         for server in servers_l:
             server_id = server['ID']
             out.append(Server(server_id=server_id))

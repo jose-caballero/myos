@@ -1,5 +1,6 @@
 import json
 from myos.tools import run
+from myos.entitylist import EntityList
 
 class Cloud:
     def __init__(self, cloud="admin"):
@@ -14,7 +15,7 @@ class Cloud:
         cmd = f'openstack --os-cloud {self.cloud} hypervisor list --format json'
         results = run(cmd)
         hv_l = json.loads(results.out)
-        out = []
+        out = EntityList() 
         for hv in hv_l:
             hostname = hv['Hypervisor Hostname']
             out.append( Hypervisor(hostname=hostname) )
@@ -29,7 +30,7 @@ class Cloud:
         cmd = f'openstack --os-cloud {self.cloud} flavor list --all --format json'
         results = run(cmd)
         flavor_l = json.loads(results.out)
-        out = []
+        out = EntityList()
         for flavor in flavor_l:
             flavor_id = flavor['ID']
             out.append( Flavor(flavor_id=flavor_id) )
@@ -44,7 +45,7 @@ class Cloud:
         cmd = f'openstack --os-cloud {self.cloud} image list --all --format json'
         results = run(cmd)
         image_l = json.loads(results.out)
-        out = []
+        out = EntityList()
         for image in image_l:
             image_id = image['ID']
             out.append( Image(image_id=image_id) )
@@ -59,7 +60,7 @@ class Cloud:
         cmd = f'openstack --os-cloud {self.cloud} project list --format json'
         results = run(cmd)
         project_l = json.loads(results.out)
-        out = []
+        out = EntityList()
         for project in project_l:
             project_id = project['ID']
             out.append( Project(project_id=project_id) )
@@ -74,7 +75,7 @@ class Cloud:
         cmd = f'openstack --os-cloud {self.cloud} floating ip list --format json'
         results = run(cmd)
         fip_l = json.loads(results.out)
-        out = []
+        out = EntityList()
         for fip in fip_l:
             fip_id = fip['ID']
             out.append( FloatingIP(fip_id=fip_id) )

@@ -1,6 +1,7 @@
 import json
 from myos.tools import run
 from myos.cloud import Cloud
+from myos.entitylist import EntityList
 
 
 class Domain:
@@ -68,8 +69,8 @@ class Domain:
         from myos.project import Project
         cmd = f'openstack --os-cloud {self._cloud.cloud} project list --domain {self.name} --format json'
         results = run(cmd)
-        out = []
         projects = json.loads(results.out)
+        out = EntityList()
         for project in projects:
             project_id = project['ID']
             out.append(Project(project_id=project_id))
@@ -97,7 +98,7 @@ class Domain:
         from myos.user import User
         cmd = f'openstack --os-cloud {self._cloud.cloud} user list --domain {self.name} --format json'
         results = run(cmd)
-        out = []
+        out = EntityList()
         users = json.loads(results.out)
         for user in users:
             user_id = user['ID']

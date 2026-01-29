@@ -1,6 +1,7 @@
 import json
 from myos.tools import run
 from myos.cloud import Cloud
+from myos.entitylist import EntityList
 
 #  
 #  $ openstack --os-cloud admin flavor show l3.micro --format json
@@ -145,7 +146,7 @@ class Flavor:
         cmd = f'openstack --os-cloud {self._cloud.cloud} server list --flavor {self.name} --all-projects --format json --column ID'
         results = run(cmd)
         servers_l = json.loads(results.out)
-        out = []
+        out = EntityList()
         for server in servers_l:
             server_id = server['ID']
             out.append(Server(server_id=server_id))

@@ -1,6 +1,7 @@
 import json
 from myos.tools import run
 from myos.cloud import Cloud
+from myos.entitylist import EntityList
 
 class Image:
     def __init__(self, image_id=None, name=None, cloud=Cloud()):
@@ -68,7 +69,7 @@ class Image:
         cmd = f'openstack --os-cloud {self._cloud.cloud} server list --image {self.name} --all-projects --format json --column ID'
         results = run(cmd)
         servers_l = json.loads(results.out)
-        out = []
+        out = EntityList()
         for server in servers_l:
             server_id = server['ID']
             out.append(Server(server_id=server_id))
