@@ -177,7 +177,7 @@ class Project:
 
 
     ####################################
-    # BEGIN TEST 
+    # BEGIN DEV
     ####################################
 
     def add(self, entity):
@@ -194,8 +194,19 @@ class Project:
         cmd = f'openstack --os-cloud {self._cloud.cloud} role add user --user {user.id} --project {self.name} --user-domain {user.domain.name}'
         results = run(cmd)
 
+
+    def remove(self, entity):
+        from myos.user import User
+        if type(entity) is User:
+            self._remove_user(entity)
+
+    def _remove_user(self, user):
+        pass
+        # TO BE IMPLEMENTED
+
+
     ####################################
-    # END TEST 
+    # END DEV
     ####################################
 
 
