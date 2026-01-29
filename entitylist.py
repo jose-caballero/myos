@@ -1,4 +1,4 @@
-class UserList(list):
+class EntityList(list):
 
     def filter(self, filter_lamba):
         filtered = filter(filter_lamba, self.__iter__())
