@@ -11,7 +11,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 
 >>> from myos.user import User
 
->>> user = User(name='wup22514@stfc')
+>>> user = User(name='wup22514', domain_name='stfc')
 >>> user.id
 'd0b0337d0d3aff182ebb41ff5581ea057c18daeaaeda3b3cc56adce83d6b67d1'
 >>> user.email
