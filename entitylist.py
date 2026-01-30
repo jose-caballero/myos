@@ -1,10 +1,15 @@
 class EntityList(list):
 
     def filter(self, filter_lambda):
-        filtered = filter(filter_lambda, self.__iter__())
-        filtered = list(filtered)
-        self[:] = filtered
+        tmp = filter(filter_lambda, self)
+        #tmp = list(tmp)
+        return EntityList(tmp)
 
     def sort(self, sort_lambda):
-        super().sort(key=sort_lambda)
+        tmp = sorted(self, key=sort_lambda)
+        return EntityList(tmp)
+
+    def map(self, map_lambda):
+        tmp = map(map_lambda, self)
+        return EntityList(tmp)
 
