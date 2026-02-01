@@ -45,6 +45,17 @@ class Server:
             return self._id
 
     @property
+    def status(self):
+        """
+        returns the status of this Server
+        """
+        if not self._id:
+            self._get_data()
+            return self._data_d['status']
+        else:
+            return self._id
+
+    @property
     def flavor(self):
         """
         returns the Flavor of this Server
