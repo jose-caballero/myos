@@ -176,6 +176,13 @@ class Project:
             out.append(FloatingIP(fip_id=fip_id))
         return out
 
+    @property
+    def quotas(self):
+        from myos.quota import Quota
+        cmd = f'openstack --os-cloud {self._cloud.cloud} quota show {self.name} --format json'
+        results = run(cmd)
+        return Quota(json.loads(results.out))
+
 
     ####################################
     # BEGIN DEV
@@ -223,6 +230,9 @@ if __name__ == '__main__':
     #uu = p.users
     #for u in uu:
     #    print(u.name)
-    fips = p.fips
-    print(fips[0].ip)
+    #fips = p.fips
+    #print(fips[0].ip)
+    quotas = p.quotas
+    print(quotas.cores)
+    print(quotas.ram)
 
