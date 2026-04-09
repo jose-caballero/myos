@@ -203,6 +203,34 @@ class Project:
 
 
     @property
+    def images(self):
+        """
+        returns the list of Images in this Project
+
+        $ openstack --os-cloud admin image list --project fa0f417fb4b5462791e4320e317eb2d2 -f json -c ID | head -7
+        [
+          {
+            "ID": "44d86835-03ba-4ce4-bd8f-649f52434815"
+          },
+          {
+            "ID": "30f6e47f-3ec5-4fa4-a305-df06c56d00d6"
+          },
+          ...
+          ...
+        ]
+        """
+        from myos.image import Image
+        cmd = f'openstack --os-cloud {self._cloud.cloud} image list --project {self.name} --format json -c ID'
+        results = run(cmd)
+        image_l = json.loads(results.out)
+        out = EntityList()
+        for image in image_l:
+            image_id = image['ID']
+            out.append(Image(image_id=image_id))
+        return out
+
+
+    @property
     def quotas(self):
         from myos.quota import Quota
         cmd = f'openstack --os-cloud {self._cloud.cloud} quota show {self.name} --format json'
