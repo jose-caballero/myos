@@ -229,13 +229,20 @@ class Project:
         elif type(entity) is Flavor:
             self._add_flavor(entity)
 
+    def remove(self, entity):
+        from myos.user import User
+        if type(entity) is User:
+            self._remove_user(entity)
+        elif type(entity) is Flavor:
+            self._remove_flavor(entity)
+
     def _add_user(self, user):
         # example: 
         #    openstack role add user 
         #    --user 69669657eb53642a96b6a03cf27fb47b9fef0f863da0e5ca285c724c91c50e47 
         #    --project f2ae44b03b3742d0808c6197b76b0e5e 
         #    --user-domain stfc
-        cmd = f'openstack --os-cloud {self._cloud.cloud} role add user --user {user.id} --project {self.name} --user-domain {user.domain.name}'
+        cmd = f'openstack --os-cloud {self._cloud.cloud} role add --user {user.id} --project {self.name} --user-domain {user.domain.name} user'
         results = run(cmd)
 
     def _add_flavor(self, flavor):
@@ -244,16 +251,9 @@ class Project:
         cmd = f'openstack --os-cloud {self._cloud.cloud} flavor set --project {self.name} {flavor.name}'
         results = run(cmd)
 
-    def remove(self, entity):
-        from myos.user import User
-        if type(entity) is User:
-            self._remove_user(entity)
-        elif type(entity) is Flavor:
-            self._remove_flavor(entity)
-
     def _remove_user(self, user):
-        pass
-        # TO BE IMPLEMENTED
+        cmd = f'openstack --os-cloud {self._cloud.cloud} role remove --user {user.id} --project {self.name} --user-domain {user.domain.name} user'
+        results = run(cmd)
 
     def _remove_flavor(self, flavor):
         # command:
