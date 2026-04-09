@@ -107,6 +107,33 @@ class Hypervisor:
         return out
 
 
+    # ========================================================== 
+    #   perform actions
+    # ========================================================== 
+
+    def enable(self):
+        """
+        Enable this Hypervisor 
+
+        example:
+            openstack --os-cloud admin compute service set --enable hv399.nubes.rl.ac.uk nova-compute
+        """
+        cmd = f'openstack --os-cloud {self._cloud.cloud} compute service set --enable {self.name} nova-compute'
+        results = run(cmd)
+
+    def disable(self):
+        """
+        Disable this Hypervisor 
+
+        example:
+            openstack --os-cloud admin compute service set --disable hv399.nubes.rl.ac.uk nova-compute
+        """
+        cmd = f'openstack --os-cloud {self._cloud.cloud} compute service set --disable {self.name} nova-compute'
+        results = run(cmd)
+
+
+
+
 if __name__ == '__main__':
     hv = Hypervisor(name='hv300.nubes.rl.ac.uk')
     hv = Hypervisor(name='hv-a100x8-8.nubes.rl.ac.uk')
