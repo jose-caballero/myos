@@ -207,7 +207,7 @@ class Project:
         """
         returns the list of Images in this Project
 
-        $ openstack --os-cloud admin image list --project fa0f417fb4b5462791e4320e317eb2d2 -f json -c ID | head -7
+        $ openstack --os-cloud admin image list --project fa0f417fb4b5462791e4320e317eb2d2 -f json -c ID 
         [
           {
             "ID": "44d86835-03ba-4ce4-bd8f-649f52434815"
@@ -227,6 +227,33 @@ class Project:
         for image in image_l:
             image_id = image['ID']
             out.append(Image(image_id=image_id))
+        return out
+
+    @property
+    def flavors(self):
+        """
+        returns the list of Flavors in this Project
+
+        $ openstack --os-cloud J-C-Bejar-Scratch-Space flavor list --os-project-id f7c59f63597648caa654c3427f8d22d3 -f json -c ID 
+        [
+          {
+            "ID": "0001e264-dc23-4029-a71e-3be4c70635c1"
+          },
+          {
+            "ID": "0d2555d9-23dc-4b40-a2f4-d03281d58719"
+          },
+          ...
+          ...
+        ]
+        """
+        from myos.flavor import Flavor
+        cmd = f'openstack --os-cloud {self._cloud.cloud} flavor list --os-project-id {self.id} --format json -c ID'
+        results = run(cmd)
+        flavor_l = json.loads(results.out)
+        out = EntityList()
+        for flavor in flavor_l:
+            flavor_id = flavor['ID']
+            out.append(Flavor(flavor_id=flavor_id))
         return out
 
 
