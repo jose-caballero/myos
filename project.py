@@ -183,6 +183,14 @@ class Project:
         results = run(cmd)
         return Quota(json.loads(results.out))
 
+    @property
+    def shared_quotas(self):
+        from myos.quota import SharedQuota
+        cmd = f'openstack --os-cloud {self._cloud.cloud} share quota show {self.name} --format json'
+        results = run(cmd)
+        return SharedQuota(json.loads(results.out))
+
+
 
     ####################################
     # BEGIN DEV

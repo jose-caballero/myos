@@ -200,3 +200,71 @@ class Quota:
         else:
             return None
 
+class SharedQuota:
+    def __init__(self, data):
+        self.data = data
+        # self._data is dict that looks like this
+        #
+        # {
+        #   "gigabytes": 4096,
+        #   "id": "06ee7f8a3202436288b09a981d341b75",
+        #   "per_share_gigabytes": -1,
+        #   "replica_gigabytes": 1000,
+        #   "share_group_snapshots": 50,
+        #   "share_groups": 50,
+        #   "share_networks": 0,
+        #   "share_replicas": 100,
+        #   "shares": 100,
+        #   "snapshot_gigabytes": 0,
+        #   "snapshots": 0
+        # }
+        #
+
+    @property
+    def gigabytes(self):
+        return self.data["gigabytes"]
+
+    @property
+    def id(self):
+        return self.data["id"]
+
+    @property
+    def project_id(self):
+        return self.id
+
+    @property
+    def per_share_gigabytes(self):
+        return self.data["per_share_gigabytes"]
+
+    @property
+    def replica_gigabytes(self):
+        return self.data["replica_gigabytes"]
+
+    @property
+    def share_group_snapshots(self):
+        return self.data["share_group_snapshots"]
+
+    @property
+    def share_groups(self):
+        return self.data["share_groups"]
+
+    @property
+    def share_networks(self):
+        return self.data["share_networks"]
+
+    @property
+    def share_replicas(self):
+        return self.data["share_replicas"]
+
+    @property
+    def shares(self):
+        return self.data["shares"]
+
+    @property
+    def snapshot_gigabytes(self):
+        return self.data["snapshot_gigabytes"]
+
+    @property
+    def snapshots(self):
+        return self.data["snapshots"]
+
