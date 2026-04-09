@@ -177,6 +177,32 @@ class Project:
         return out
 
     @property
+    def volumes(self):
+        """
+        returns the list of Volumes in this Project
+
+        $ openstack --os-cloud admin volume list --project 06ee7f8a3202436288b09a981d341b75  -f json -c ID
+        [
+          {
+            "ID": "f341094e-d27c-4251-b801-5465df070af3"
+          },
+          {
+            "ID": "6ea541dc-5173-4ce2-9fd9-ca29c9c129c6"
+          }
+        ]
+        """
+        from myos.volume import Volume
+        cmd = f'openstack --os-cloud {self._cloud.cloud} volume list --project {self.name} --format json -c ID'
+        results = run(cmd)
+        volume_l = json.loads(results.out)
+        out = EntityList()
+        for volume in volume_l:
+            volume_id = volume['ID']
+            out.append(Volume(volume_id=volume_id))
+        return out
+
+
+    @property
     def quotas(self):
         from myos.quota import Quota
         cmd = f'openstack --os-cloud {self._cloud.cloud} quota show {self.name} --format json'
