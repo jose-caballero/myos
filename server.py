@@ -59,9 +59,7 @@ class Server:
         """
         if not self._id:
             self._get_data()
-            return self._data_d['status']
-        else:
-            return self._id
+        return self._data_d['status']
 
     @property
     def flavor(self):

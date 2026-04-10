@@ -1,0 +1,34 @@
+#!/usr/bin/env python3
+
+from myos.server import Server
+from rich.table import Table
+from rich.console import Console
+
+import sys
+
+server_ip = sys.argv[1]
+
+server = Server(ip=server_ip)
+
+# Set show_header=False to hide the top row
+table = Table(show_header=False, box=None)
+# Styles still apply to the columns even if the headers aren't visible
+table.add_column(style="yellow", no_wrap=True)
+table.add_column(style="white")
+
+table.add_row("server.id", server.id)
+table.add_row("server.name", server.name)
+table.add_row("server.user.id", server.user.id)
+table.add_row("server.user.name", server.user.name)
+table.add_row("server.user.email", server.user.email)
+table.add_row("server.status", server.status)
+table.add_row("server.flavor.name", server.flavor.name)
+table.add_row("server.image.name", server.image.name)
+table.add_row("server.hypervisor.name", server.hypervisor.name)
+table.add_row("server.project.id", server.project.id)
+table.add_row("server.project.name", server.project.name)
+
+console = Console()
+print()
+console.print(table)
+print()
