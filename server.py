@@ -107,6 +107,17 @@ class Server:
         hostname = self._data_d['OS-EXT-SRV-ATTR:hypervisor_hostname']
         return Hypervisor(name=hostname)
 
+    @property
+    def project(self):
+        """
+        returns the Project this Server belongs to 
+        """
+        from myos.project import Project 
+        if not self._data_d:
+            self._get_data()
+        project_id = self._data_d['project_id']
+        return Project(project_id=project_id)
+
 
 
 
