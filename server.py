@@ -105,7 +105,7 @@ class Server:
         if not self._data_d:
             self._get_data()
         hostname = self._data_d['OS-EXT-SRV-ATTR:hypervisor_hostname']
-        return Hypervisor(hostname=hostname)
+        return Hypervisor(name=hostname)
 
 
 
