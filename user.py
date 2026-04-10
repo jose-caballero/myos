@@ -173,6 +173,98 @@ class User:
         return out
 
 
+class UserGroup:
+    #
+    #   $ openstack --os-cloud admin group show --domain jasmin glo-fhicc-U-vcloud_admins
+    #   +-------------+------------------------------------------------------------------+
+    #   | Field       | Value                                                            |
+    #   +-------------+------------------------------------------------------------------+
+    #   | description | cluster:vio-group                                                |
+    #   | domain_id   | f6fc1289348e49f1b9c32af2f680c9b3                                 |
+    #   | id          | 50b756eb08c83d1dac679f417b8514d314114a797fec953af38b40e9a26be133 |
+    #   | name        | glo-fhicc-U-vcloud_admins                                        |
+    #   +-------------+------------------------------------------------------------------+
+    #   
+    def __init__(self, group_id=None, name=None, domain_name=None, cloud=Cloud()):
+        self._cloud = cloud
+        self._id = None
+        self._name = None
+        self._domain = None
+        if group_id:
+            self._id = group_id
+        if name:
+            self._name = name
+            self._domain = Domain(name=domain_name)
+        self._data_d = {}
+
+    def _get_data(self):
+        if self._name:
+            cmd = f'openstack --os-cloud {self._cloud.cloud} group show {self._name} --domain {self._domain.name} -f json'
+        if self._id:
+            cmd = f'openstack --os-cloud {self._cloud.cloud} group show {self._id} -f json'
+        results = run(cmd)
+        self._data_d = json.loads(results.out)
+
+    @property
+    def name(self):
+        """
+        returns the name associated to this User Group
+        """
+        if not self._name:
+            self._get_data()
+            return self._data_d['name']
+        else:
+            return self._name
+
+    @property
+    def domain(self):
+        """
+        returns the Domain associated to this User Group
+        """
+        if not self._domain:
+            self._get_data()
+            domain_id = self._data_d['domain_id']
+            return Domain(domain_id=domain_id)
+        else:
+            return self._domain
+
+    @property
+    def id(self):
+        """
+        returns the user_id associated to this User Group
+        """
+        if not self._id:
+            self._get_data()
+            return self._data_d['id']
+        else:
+            return self._id
+
+    @property
+    def description(self):
+        """
+        returns the description associated to this User Group
+        """
+        if not self._data_d:
+            self._get_data()
+        return self._data_d['description']
+
+    @property
+    def users(self):
+        """
+        returns the list of Users in this User Group
+        """
+        cmd = f'openstack --os-cloud {self._cloud.cloud} user list --group {self.id} -f json -c ID'
+        results = run(cmd)
+        users_l  = json.loads(results.out)
+        out = EntityList()
+        for user in users_l:
+            user_id = user['ID']
+            out.append(User(user_id=user_id))
+        return out
+
+
+
+
 if __name__ == '__main__':
     #u = User(name="admin-wup22514")
     #u = User(name="wup22514@stfc")
