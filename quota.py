@@ -200,6 +200,7 @@ class Quota:
         else:
             return None
 
+
 class SharedQuota:
     def __init__(self, data):
         self.data = data

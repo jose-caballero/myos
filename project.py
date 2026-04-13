@@ -291,6 +291,19 @@ class Project:
         elif type(entity) is Flavor:
             self._remove_flavor(entity)
 
+    def set_quota_cores(self, cores):
+        self._set_quota("cores", cores)
+
+    def set_quota_ram(self, ram):
+        self._set_quota("ram", ram)
+
+    def set_quota_gigabytes(self, gigabytes):
+        self._set_quota("gigabytes", gigabytes)
+
+    def set_quota_flaiting_ips(self, floating_ips):
+        self._set_quota("floating_ips", floating_ips)
+
+
     def _add_user(self, user):
         # example: 
         #    openstack role add user 
@@ -316,7 +329,9 @@ class Project:
         cmd = f'openstack --os-cloud {self._cloud.cloud} flavor unset --project {self.name} {flavor.name}'
         results = run(cmd)
 
-
+    def _set_quota(self, resource, value):
+        cmd = f'openstack --os-cloud {self._cloud.cloud} quota set --{resource} {value} {self.id}'
+        results = run(cmd)
 
 
     ####################################
