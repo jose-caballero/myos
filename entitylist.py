@@ -1,3 +1,5 @@
+from functools import reduce
+
 class EntityList(list):
 
     def filter(self, filter_lambda):
@@ -12,4 +14,7 @@ class EntityList(list):
     def map(self, map_lambda):
         tmp = map(map_lambda, self)
         return EntityList(tmp)
+
+    def reduce(self, reduce_lambda, initial)
+        return reduce(reduce_lambda, self, initial)
 
