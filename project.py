@@ -300,7 +300,7 @@ class Project:
     def set_quota_gigabytes(self, gigabytes):
         self._set_quota("gigabytes", gigabytes)
 
-    def set_quota_flaiting_ips(self, floating_ips):
+    def set_quota_floaiting_ips(self, floating_ips):
         self._set_quota("floating_ips", floating_ips)
 
 
