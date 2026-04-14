@@ -15,6 +15,6 @@ class EntityList(list):
         tmp = map(map_lambda, self)
         return EntityList(tmp)
 
-    def reduce(self, reduce_lambda, initial)
+    def reduce(self, reduce_lambda, initial):
         return reduce(reduce_lambda, self, initial)
 
