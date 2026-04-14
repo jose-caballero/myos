@@ -323,8 +323,6 @@ class Project:
         # --group 43eba3ef7244a53f90f5d114fbf3f3ce0578a08f430aca380ff597d6a40381b3 
         # --group-domain jasmin 
         # user
-
-        print(group.domain.id)
         cmd = f'openstack --os-cloud {self._cloud.cloud} role add --project {self.id} --group {group.id} --group-domain {group.domain.id} user'
         results = run(cmd)
 
