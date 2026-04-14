@@ -281,6 +281,8 @@ class Project:
         from myos.user import User
         if type(entity) is User:
             self._add_user(entity)
+        elif type(entity) is UserGroup:
+            self._add_user_group(entity)
         elif type(entity) is Flavor:
             self._add_flavor(entity)
 
@@ -311,6 +313,17 @@ class Project:
         #    --project f2ae44b03b3742d0808c6197b76b0e5e 
         #    --user-domain stfc
         cmd = f'openstack --os-cloud {self._cloud.cloud} role add --user {user.id} --project {self.name} --user-domain {user.domain.name} user'
+        results = run(cmd)
+
+    def _add_user_group(self, group):
+        # example:
+        # openstack role add 
+        # --project b23574609dd44a219b1dbf5d69a8f6d1 
+        # --group 43eba3ef7244a53f90f5d114fbf3f3ce0578a08f430aca380ff597d6a40381b3 
+        # --group-domain jasmin 
+        # user
+
+        cmd = f'openstack --os-cloud admin role add --project {self.id} --group {group.id} --group-domain {group.domain.id} user'
         results = run(cmd)
 
     def _add_flavor(self, flavor):
