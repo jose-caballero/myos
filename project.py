@@ -278,7 +278,8 @@ class Project:
     ####################################
 
     def add(self, entity):
-        from myos.user import User
+        from myos.user import User, UserGroup
+        from myos.flavor import Flavor
         if type(entity) is User:
             self._add_user(entity)
         elif type(entity) is UserGroup:
@@ -322,9 +323,9 @@ class Project:
         # --group 43eba3ef7244a53f90f5d114fbf3f3ce0578a08f430aca380ff597d6a40381b3 
         # --group-domain jasmin 
         # user
-
-        cmd = f'openstack --os-cloud admin role add --project {self.id} --group {group.id} --group-domain {group.domain.id} user'
-        results = run(cmd)
+        print("hi")
+        #cmd = f'openstack --os-cloud admin role add --project {self.id} --group {group.id} --group-domain {group.domain.id} user'
+        #results = run(cmd)
 
     def _add_flavor(self, flavor):
         # command:
