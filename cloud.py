@@ -18,7 +18,7 @@ class Cloud:
         out = EntityList() 
         for hv in hv_l:
             hostname = hv['Hypervisor Hostname']
-            out.append( Hypervisor(hostname=hostname) )
+            out.append( Hypervisor(hostname=hostname, cloud=self) )
         return out
 
     @property
@@ -33,7 +33,7 @@ class Cloud:
         out = EntityList()
         for flavor in flavor_l:
             flavor_id = flavor['ID']
-            out.append( Flavor(flavor_id=flavor_id) )
+            out.append( Flavor(flavor_id=flavor_id, cloud=self) )
         return out
 
     @property
@@ -48,7 +48,7 @@ class Cloud:
         out = EntityList()
         for image in image_l:
             image_id = image['ID']
-            out.append( Image(image_id=image_id) )
+            out.append( Image(image_id=image_id, cloud=self) )
         return out
     
     @property
@@ -63,7 +63,7 @@ class Cloud:
         out = EntityList()
         for project in project_l:
             project_id = project['ID']
-            out.append( Project(project_id=project_id) )
+            out.append( Project(project_id=project_id, cloud=self) )
         return out
 
     @property
@@ -78,7 +78,7 @@ class Cloud:
         out = EntityList()
         for fip in fip_l:
             fip_id = fip['ID']
-            out.append( FloatingIP(fip_id=fip_id) )
+            out.append( FloatingIP(fip_id=fip_id, cloud=self) )
         return out
 
 
