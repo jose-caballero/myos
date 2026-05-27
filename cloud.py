@@ -18,7 +18,7 @@ class Cloud:
         out = EntityList() 
         for hv in hv_l:
             hostname = hv['Hypervisor Hostname']
-            out.append( Hypervisor(hostname=hostname, cloud=self) )
+            out.append( Hypervisor(name=hostname, cloud=self) )
         return out
 
     @property
