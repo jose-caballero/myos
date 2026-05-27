@@ -103,7 +103,7 @@ class Hypervisor:
         out = EntityList()
         for server in servers_l:
             server_id = server['ID']
-            out.append(Server(server_id=server_id))
+            out.append(Server(server_id=server_id, cloud=self._cloud))
         return out
 
 
