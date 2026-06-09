@@ -153,6 +153,52 @@ class Flavor:
         return out
 
 
+    @property
+    def hypervisors(self):
+        """
+        returns all Hypervisor compatible with this Flavor
+
+        this method is implemented in python
+        an equivalent using the command line would be something like this
+
+                # 1. Set your cloud environment variable (equivalent to cloud="admin")
+                export OS_CLOUD=admin
+                
+                # 2. Fetch the flavor specs, find matching aggregates, and list their hosts
+                openstack aggregate list -f json | jq -r --argjson specs "$(
+                  openstack flavor show g-v100.large -f json | jq '
+                    .properties |
+                    {
+                      hosttype: ."aggregate_instance_extra_specs:hosttype",
+                      storage: ."aggregate_instance_extra_specs:local-storage-type"
+                    }
+                  '
+                )" '
+                  .[] |
+                  select(.Properties.hosttype == $specs.hosttype and .Properties."local-storage-type" == $specs.storage) |
+                  .Hosts[]
+                '
+        """
+        from myos.hypervisor import Hypervisor
+        import openstack
+
+        conn = openstack.connect(cloud=self._cloud.cloud)
+        flavor = conn.compute.find_flavor(self.name)
+        flavor_hosttype = flavor.extra_specs.get("aggregate_instance_extra_specs:hosttype")
+        flavor_storage_type = flavor.extra_specs.get("aggregate_instance_extra_specs:local-storage-type")
+        out = EntityList()
+        for agg in conn.compute.aggregates():
+            if agg.metadata.get("hosttype") == flavor_hosttype and\
+               agg.metadata.get("local-storage-type") == flavor_storage_type:
+                    for hypervisor_name in agg.hosts:
+                        out.append(Hypervisor(name=hypervisor_name))
+        return out
+
+
+
+
+        
+
 
 
 if __name__ == '__main__':
