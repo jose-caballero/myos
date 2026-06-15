@@ -120,6 +120,7 @@ class Hypervisor:
         """
         cmd = f'openstack --os-cloud {self._cloud.cloud} compute service set --enable {self.name} nova-compute'
         results = run(cmd)
+        return results
 
     def disable(self):
         """
@@ -130,6 +131,7 @@ class Hypervisor:
         """
         cmd = f'openstack --os-cloud {self._cloud.cloud} compute service set --disable {self.name} nova-compute'
         results = run(cmd)
+        return results
 
 
 
