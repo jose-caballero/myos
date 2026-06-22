@@ -58,7 +58,7 @@ class Server:
         """
         returns the status of this Server
         """
-        if not self._id:
+        if not self._data_d:
             self._get_data()
         return self._data_d['status']
 
