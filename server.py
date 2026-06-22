@@ -116,7 +116,21 @@ class Server:
         project_id = self._data_d['project_id']
         return Project(project_id=project_id)
 
+    def start(self):
+        """
+        restarts this Server when it is in status SHUTOFF
+        """
+        cmd = f'openstack --os-cloud {self._cloud.cloud} server start {self.id}'
+        results = run(cmd)
+        return results.out
 
+    def stop(self):
+        """
+        stops this Server when it is in status ACTIVE
+        """
+        cmd = f'openstack --os-cloud {self._cloud.cloud} server stop {self.id}'
+        results = run(cmd)
+        return results.out
 
 
 if __name__ == '__main__':

@@ -1,4 +1,5 @@
 import json
+import re
 from myos.tools import run
 from myos.cloud import Cloud
 from myos.entitylist import EntityList
@@ -53,6 +54,22 @@ class Hypervisor:
             return self._data_d['id']
         else:
             return self._id
+
+    @property
+    def uptime(self):
+        """
+        returns, if possible, the number of days
+        since last time this HV was rebooted
+        """
+        try:
+            match = re.search(r'(\d+)\s+days', self._data_d['uptime'])
+            if match:
+                out = int(match.group(1))
+            else:
+                out = None
+        except:
+            out = None
+        return out
 
     @property 
     def status(self):
