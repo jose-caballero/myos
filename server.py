@@ -1,6 +1,7 @@
 import json
 from myos.tools import run
 from myos.cloud import Cloud
+from myos.entitylist import EntityList
 
 class Server:
     def __init__(self, server_id=None, name=None, ip=None, cloud=Cloud()):
@@ -115,6 +116,42 @@ class Server:
             self._get_data()
         project_id = self._data_d['project_id']
         return Project(project_id=project_id)
+
+    @property
+    def volumes(self):
+        """
+        returns the list of Volumes attached to this Server
+
+        they look like this:
+
+              "volumes_attached": [
+                {
+                  "id": "1dae81a0-946c-43d1-93d7-f1e300a3331b",
+                  "delete_on_termination": false
+                },
+                {
+                  "id": "9d9b94b7-0ebd-439c-a15e-4bcd55b84c00",
+                  "delete_on_termination": false
+                },
+                {
+                  "id": "733b63ad-098f-492c-bd87-debe2ec24760",
+                  "delete_on_termination": false
+                },
+                {
+                  "id": "e6a81cd7-c055-40fa-9e71-3d913b070c91",
+                  "delete_on_termination": false
+                }
+              ]
+        """
+        from myos.volume import Volume
+        if not self._data_d:
+            self._get_data()
+        out = EntityList()
+        for volume in self._data_d['volumes_attached']:
+            volume_id = volume["id"]
+            out.append(Volume(volume_id=volume_id))
+        return out
+
 
     def start(self):
         """
