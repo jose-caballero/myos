@@ -178,3 +178,32 @@ class Volume:
         user_id = self._data_d['user_id']
         return User(user_id=user_id)
 
+    @property
+    def servers(self):
+        """
+        returns the list of Servers attached to this Volume
+
+        Attachements look like this
+
+              "attachments": [
+                {
+                  "id": "e6a81cd7-c055-40fa-9e71-3d913b070c91",
+                  "attachment_id": "1a6b211a-01c8-4d6c-a4a8-aa157c27d2bd",
+                  "volume_id": "e6a81cd7-c055-40fa-9e71-3d913b070c91",
+                  "server_id": "4d5a25dd-816a-4154-a5f3-710be37945d1",
+                  "host_name": "hv983.nubes.rl.ac.uk",
+                  "device": "/dev/sde",
+                  "attached_at": "2026-06-17T09:06:42.000000"
+                }
+              ],
+        """
+        from myos.server import Server
+        if not self._data_d:
+            self._get_data()
+        out = EntityList()
+        for attachment in self._data_d['attachments']:
+            server_id = attachment['server_id']
+            server = Server(server_id=server_id)
+            out.append(server)
+        return out
+

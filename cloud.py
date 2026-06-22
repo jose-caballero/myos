@@ -81,6 +81,23 @@ class Cloud:
             out.append( FloatingIP(fip_id=fip_id, cloud=self) )
         return out
 
+    @property
+    def volumes(self):
+        """
+        returns the entire list of Volume objects for this cloud instance
+        """
+        from myos.volume import Volume
+        cmd = f'openstack --os-cloud {self.cloud} volume list --all-projects --format json'
+        results = run(cmd)
+        volume_l = json.loads(results.out)
+        out = EntityList()
+        for volume in volume_l:
+            volume_id = volume['ID']
+            out.append( Volume(volume_id=volume_id, cloud=self) )
+        return out
+
+
+
 
 if __name__ == '__main__':
     cloud = Cloud("admin")
