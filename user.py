@@ -127,7 +127,7 @@ class User:
         """
         returns all Servers created by this User
         """
-        from my.server import Server
+        from myos.server import Server
         cmd = f'openstack --os-cloud {self._cloud.cloud} server list --user {self.name} --user-domain {self.domain.name} --all-projects --format json'
         # 
         # output looks like this
