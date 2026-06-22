@@ -1,4 +1,5 @@
 import json
+from datetime import datetime, timezone
 from myos.tools import run
 from myos.cloud import Cloud
 from myos.entitylist import EntityList
@@ -151,6 +152,25 @@ class Server:
             volume_id = volume["id"]
             out.append(Volume(volume_id=volume_id))
         return out
+
+
+    # FIXME 
+    # this is a draft. It needs a proper class EventList
+    @property
+    def seconds_in_current_state(self):
+        import openstack
+        conn = openstack.connect(cloud=self._cloud.cloud)
+        events = list(conn.compute.server_actions(self.id))
+        last_event = events[0]
+        last_event_t = last_event.start_time
+        # last_event_t looks like this
+        # 2024-07-25T12:08:40.000000
+        last_event_dt = datetime.fromisoformat(last_event_t).replace(
+            tzinfo=timezone.utc
+        )
+        time_delta = datetime.now(timezone.utc) - last_event_dt
+        seconds = int(time_delta.total_seconds())
+        return seconds
 
 
     def start(self):
