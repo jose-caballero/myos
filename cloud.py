@@ -22,6 +22,22 @@ class Cloud:
         return out
 
     @property
+    def users(self):
+        """
+        returns the entire list of Users for this cloud instance
+        """
+        from myos.user import User
+        cmd = f'openstack --os-cloud {self.cloud} user list --format json'
+        results = run(cmd)
+        user_l = json.loads(results.out)
+        out = EntityList() 
+        for user in user_l:
+            user_id = user['ID']
+            out.append( User(user_id=user_id, cloud=self) )
+        return out
+
+
+    @property
     def flavors(self):
         """
         returns the entire list of Flavor objects for this cloud instance
