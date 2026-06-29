@@ -2,6 +2,7 @@ import json
 import re
 from myos.tools import run
 from myos.cloud import Cloud
+from myos.aggregate import Aggregate
 from myos.entitylist import EntityList
 
 class Hypervisor:
@@ -88,6 +89,17 @@ class Hypervisor:
         if not self._data_d:
             self._get_data()
         return self._data_d['state']
+
+    @property
+    def aggregate(self):
+        """
+        returns an Aggregate object 
+        we assume a Hypervisor has one and only one Aggregate
+        """
+        if not self._data_d:
+            self._get_data()
+        aggregate_name = self._data_d['aggregates'][0]
+        return Aggregate(name=aggregate_name)
 
     @property
     def servers(self):
