@@ -154,6 +154,33 @@ class Server:
         return out
 
 
+    @property
+    def snapshots(self):
+        """
+        returns the list of Images created as Snapshots from this Server
+        It looks like this
+
+            laptop : ~ $ openstack --os-cloud admin image list --property instance_uuid='e1564001-33e4-4a9a-8625-b49b84fbee3b' --property image_type='snapshot'
+            +--------------------------------------+-----------------------------------------------------------------+--------+
+            | ID                                   | Name                                                            | Status |
+            +--------------------------------------+-----------------------------------------------------------------+--------+
+            | ea4d373f-d50c-442b-a8d7-d2a9e2d5bd0f | stackstorm-e1564001-33e4-4a9a-8625-b49b84fbee3b-06-07-2026-0802 | active |
+            | 1753fb61-0a07-4c73-a60f-7ec1cec251bb | stackstorm-e1564001-33e4-4a9a-8625-b49b84fbee3b-06-07-2026-0830 | active |
+            | 60ccd485-7019-476f-8c70-6a90baf7f27c | stackstorm-e1564001-33e4-4a9a-8625-b49b84fbee3b-06-07-2026-0906 | active |
+            | c0b36b18-efbc-4e10-9e9c-5bdb7cd9c40d | stackstorm-e1564001-33e4-4a9a-8625-b49b84fbee3b-06-07-2026-1130 | active |
+            | 9b3eb2cc-9034-4dfe-9459-5b91c8b2124c | stackstorm-e1564001-33e4-4a9a-8625-b49b84fbee3b-06-07-2026-1500 | active |
+            +--------------------------------------+-----------------------------------------------------------------+--------+
+        """
+        from myos.image import Image
+        cmd = f'openstack --os-cloud {self._cloud.cloud} image list --property instance_uuid="{self.id}" --property image_type="snapshot" -f value -c ID'
+        results = run(cmd)
+        out = EntityList()
+        for image_id in results.out.split():
+            image_id = image_id.strip()
+            out.append( Image(image_id=image_id) )
+        return out
+
+
     # FIXME 
     # this is a draft. It needs a proper class EventList
     @property
