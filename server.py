@@ -11,12 +11,12 @@ class Server:
         self._name = None
         self._ip = None
         if ip:
-            self._ip = ip
+            self._ip = ip.strip()
             self._id = self._get_id_from_ip()
         if server_id:
             self._id = server_id
         if name:
-            self._name = name
+            self._name = name.strip()
         self._data_d = {}
 
     def _get_id_from_ip(self):

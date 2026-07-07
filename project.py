@@ -9,9 +9,9 @@ class Project:
         self._id = None
         self._name = None
         if project_id:
-            self._id = project_id
+            self._id = project_id.strip()
         if name:
-            self._name = name
+            self._name = name.strip()
         self._cloud = cloud
         self._data_d = {}
 

@@ -48,9 +48,9 @@ class Volume:
         self._id = None
         self._name = None
         if volume_id:
-            self._id = volume_id
+            self._id = volume_id.strip()
         if name:
-            self._name = name
+            self._name = name.strip()
         self._cloud = cloud
         self._data_d = {}
 

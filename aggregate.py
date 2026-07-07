@@ -8,9 +8,9 @@ class Aggregate:
         self._id = None
         self._name = None
         if aggregate_id:
-            self._id = aggregate_id
+            self._id = aggregate_id.strip()
         if name:
-            self._name = name
+            self._name = name.strip()
         self._cloud = cloud
         self._data_d = {}
 

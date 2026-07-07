@@ -10,9 +10,9 @@ class Hypervisor:
         self._id = None
         self._name = None
         if hypervisor_id:
-            self._id = hypervisor_id
+            self._id = hypervisor_id.strip()
         if name:
-            self._name = name
+            self._name = name.strip()
         self._cloud = cloud
         self._data_d = {}
 

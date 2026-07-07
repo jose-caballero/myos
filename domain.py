@@ -9,9 +9,9 @@ class Domain:
         self._id = None
         self._name = None
         if domain_id:
-            self._id = domain_id
+            self._id = domain_id.strip()
         if name:
-            self._name = name
+            self._name = name.strip()
         self._cloud = cloud
         self._data_d = {}
 

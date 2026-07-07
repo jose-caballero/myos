@@ -14,9 +14,9 @@ class User:
         self._name = None
         self._domain = None
         if user_id:
-            self._id = user_id
+            self._id = user_id.strip()
         if name:
-            self._name = name
+            self._name = name.strip()
             self._domain = Domain(name=domain_name)
         self._data_d = {}
 
