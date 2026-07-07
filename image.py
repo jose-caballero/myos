@@ -47,6 +47,15 @@ class Image:
             return self._id
 
     @property
+    def status(self):
+        """
+        returns the stautus of this Image
+        """
+        if not self._data_d:
+            self._data_d()
+        return self._data_d['status']
+
+    @property
     def servers(self):
         """
         returns all Servers using this Image
