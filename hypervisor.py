@@ -12,7 +12,10 @@ class Hypervisor:
         if hypervisor_id:
             self._id = hypervisor_id.strip()
         if name:
-            self._name = name.strip()
+            name = name.strip()
+            if "." not in name:
+                name += ".nubes.rl.ac.uk"
+            self._name = name
         self._cloud = cloud
         self._data_d = {}
 
@@ -151,14 +154,14 @@ class Hypervisor:
         results = run(cmd)
         return results
 
-    def disable(self):
+    def disable(self, reason=""):
         """
         Disable this Hypervisor 
 
         example:
             openstack --os-cloud admin compute service set --disable hv399.nubes.rl.ac.uk nova-compute
         """
-        cmd = f'openstack --os-cloud {self._cloud.cloud} compute service set --disable {self.name} nova-compute'
+        cmd = f'openstack --os-cloud {self._cloud.cloud} compute service set --disable {self.name} --disable-reason {reason} nova-compute'
         results = run(cmd)
         return results
 
