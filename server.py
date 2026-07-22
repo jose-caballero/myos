@@ -5,24 +5,15 @@ from myos.cloud import Cloud
 from myos.entitylist import EntityList
 
 class Server:
-    def __init__(self, server_id=None, name=None, ip=None, cloud=Cloud()):
+    def __init__(self, server_id=None, name=None, cloud=Cloud()):
         self._cloud = cloud
         self._id = None
         self._name = None
-        self._ip = None
-        if ip:
-            self._ip = ip.strip()
-            self._id = self._get_id_from_ip()
         if server_id:
             self._id = server_id
         if name:
             self._name = name.strip()
         self._data_d = {}
-
-    def _get_id_from_ip(self):
-        cmd = f'openstack --os-cloud {self._cloud.name} server list --all-projects --ip {self._ip} -f value -c ID'
-        results = run(cmd)
-        return results.out
 
     def _get_data(self):
         if self._name:

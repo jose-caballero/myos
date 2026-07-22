@@ -112,7 +112,19 @@ class Cloud:
             out.append( Volume(volume_id=volume_id, cloud=self) )
         return out
 
-
+    def get_servers_from_ip(self, ip):
+        """
+        get all Servers behind a given IP
+        """
+        from myos.server import Server
+        cmd = f'openstack --os-cloud {self.name} server list --all-projects --ip {ip} -f json -c ID'
+        results = run(cmd)
+        id_l = json.loads(results.out)
+        out = EntityList()
+        for section in id_l:
+            ID = section['ID']
+            out.append( Server(server_id=ID, cloud=self) )
+        return out
 
 
 if __name__ == '__main__':
