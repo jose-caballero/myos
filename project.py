@@ -140,7 +140,7 @@ class Project:
         ]
         """
         from myos.user import User
-        cmd = f'openstack --os-cloud {self._cloud.name} role assignment list --project {self.name} --names --format json'
+        cmd = f'openstack --os-cloud {self._cloud.name} role assignment list --project {self.id} --names --format json'
         results = run(cmd)
         users_l = json.loads(results.out)
         out = EntityList()
