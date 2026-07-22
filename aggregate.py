@@ -16,9 +16,9 @@ class Aggregate:
 
     def _get_data(self):
         if self._name:
-            cmd = f'openstack --os-cloud {self._cloud.cloud} aggregate show {self._name} -f json'
+            cmd = f'openstack --os-cloud {self._cloud.name} aggregate show {self._name} -f json'
         if self._id:
-            cmd = f'openstack --os-cloud {self._cloud.cloud} aggregate show {self._id} -f json'
+            cmd = f'openstack --os-cloud {self._cloud.name} aggregate show {self._id} -f json'
         results = run(cmd)
         self._data_d = json.loads(results.out)
 

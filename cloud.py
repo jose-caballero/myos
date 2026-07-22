@@ -3,8 +3,8 @@ from myos.tools import run
 from myos.entitylist import EntityList
 
 class Cloud:
-    def __init__(self, cloud="admin"):
-        self.cloud = cloud
+    def __init__(self, name="admin"):
+        self.name = name 
 
     @property
     def hypervisors(self):
@@ -12,7 +12,7 @@ class Cloud:
         returns the entire list of Hypervisor objects for this cloud instance
         """
         from myos.hypervisor import Hypervisor
-        cmd = f'openstack --os-cloud {self.cloud} hypervisor list --format json'
+        cmd = f'openstack --os-cloud {self.name} hypervisor list --format json'
         results = run(cmd)
         hv_l = json.loads(results.out)
         out = EntityList() 
@@ -27,7 +27,7 @@ class Cloud:
         returns the entire list of Users for this cloud instance
         """
         from myos.user import User
-        cmd = f'openstack --os-cloud {self.cloud} user list --format json'
+        cmd = f'openstack --os-cloud {self.name} user list --format json'
         results = run(cmd)
         user_l = json.loads(results.out)
         out = EntityList() 
@@ -43,7 +43,7 @@ class Cloud:
         returns the entire list of Flavor objects for this cloud instance
         """
         from myos.flavor import Flavor
-        cmd = f'openstack --os-cloud {self.cloud} flavor list --all --format json'
+        cmd = f'openstack --os-cloud {self.name} flavor list --all --format json'
         results = run(cmd)
         flavor_l = json.loads(results.out)
         out = EntityList()
@@ -58,7 +58,7 @@ class Cloud:
         returns the entire list of Image objects for this cloud instance
         """
         from myos.image import Image
-        cmd = f'openstack --os-cloud {self.cloud} image list --all --format json'
+        cmd = f'openstack --os-cloud {self.name} image list --all --format json'
         results = run(cmd)
         image_l = json.loads(results.out)
         out = EntityList()
@@ -73,7 +73,7 @@ class Cloud:
         returns the entire list of Project objects for this cloud instance
         """
         from myos.project import Project
-        cmd = f'openstack --os-cloud {self.cloud} project list --format json'
+        cmd = f'openstack --os-cloud {self.name} project list --format json'
         results = run(cmd)
         project_l = json.loads(results.out)
         out = EntityList()
@@ -88,7 +88,7 @@ class Cloud:
         returns the entire list of FloatingIP objects for this cloud instance
         """
         from myos.ip import FloatingIP
-        cmd = f'openstack --os-cloud {self.cloud} floating ip list --format json'
+        cmd = f'openstack --os-cloud {self.name} floating ip list --format json'
         results = run(cmd)
         fip_l = json.loads(results.out)
         out = EntityList()
@@ -103,7 +103,7 @@ class Cloud:
         returns the entire list of Volume objects for this cloud instance
         """
         from myos.volume import Volume
-        cmd = f'openstack --os-cloud {self.cloud} volume list --all-projects --format json'
+        cmd = f'openstack --os-cloud {self.name} volume list --all-projects --format json'
         results = run(cmd)
         volume_l = json.loads(results.out)
         out = EntityList()

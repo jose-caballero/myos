@@ -23,9 +23,9 @@ class User:
 
     def _get_data(self):
         if self._name:
-            cmd = f'openstack --os-cloud {self._cloud.cloud} user show {self._name} --domain {self._domain.name} -f json'
+            cmd = f'openstack --os-cloud {self._cloud.name} user show {self._name} --domain {self._domain.name} -f json'
         if self._id:
-            cmd = f'openstack --os-cloud {self._cloud.cloud} user show {self._id} -f json'
+            cmd = f'openstack --os-cloud {self._cloud.name} user show {self._id} -f json'
         results = run(cmd)
         self._data_d = json.loads(results.out)
 
@@ -90,7 +90,7 @@ class User:
         # 
         # FIXME this is not working fine
         #
-        cmd = f'openstack --os-cloud {self._cloud.cloud} role assignment list --user {self.name} --names --user-domain {self.domain.name} --format json'
+        cmd = f'openstack --os-cloud {self._cloud.name} role assignment list --user {self.name} --names --user-domain {self.domain.name} --format json'
         results = run(cmd)
         projects_l  = json.loads(results.out)
         # output is like this
@@ -128,7 +128,7 @@ class User:
         returns all Servers created by this User
         """
         from myos.server import Server
-        cmd = f'openstack --os-cloud {self._cloud.cloud} server list --user {self.name} --user-domain {self.domain.name} --all-projects --format json'
+        cmd = f'openstack --os-cloud {self._cloud.name} server list --user {self.name} --user-domain {self.domain.name} --all-projects --format json'
         # 
         # output looks like this
         #
@@ -199,9 +199,9 @@ class UserGroup:
 
     def _get_data(self):
         if self._name:
-            cmd = f'openstack --os-cloud {self._cloud.cloud} group show {self._name} --domain {self._domain.name} -f json'
+            cmd = f'openstack --os-cloud {self._cloud.name} group show {self._name} --domain {self._domain.name} -f json'
         if self._id:
-            cmd = f'openstack --os-cloud {self._cloud.cloud} group show {self._id} -f json'
+            cmd = f'openstack --os-cloud {self._cloud.name} group show {self._id} -f json'
         results = run(cmd)
         self._data_d = json.loads(results.out)
 
@@ -253,7 +253,7 @@ class UserGroup:
         """
         returns the list of Users in this User Group
         """
-        cmd = f'openstack --os-cloud {self._cloud.cloud} user list --group {self.id} -f json -c ID'
+        cmd = f'openstack --os-cloud {self._cloud.name} user list --group {self.id} -f json -c ID'
         results = run(cmd)
         users_l  = json.loads(results.out)
         out = EntityList()

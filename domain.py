@@ -18,9 +18,9 @@ class Domain:
 
     def _get_data(self):
         if self._name:
-            cmd = f'openstack --os-cloud {self._cloud.cloud} domain show {self._name} -f json'
+            cmd = f'openstack --os-cloud {self._cloud.name} domain show {self._name} -f json'
         if self._id:
-            cmd = f'openstack --os-cloud {self._cloud.cloud} domain show {self._id} -f json'
+            cmd = f'openstack --os-cloud {self._cloud.name} domain show {self._id} -f json'
         results = run(cmd)
         self._data_d = json.loads(results.out)
 
@@ -67,7 +67,7 @@ class Domain:
         ]
         """
         from myos.project import Project
-        cmd = f'openstack --os-cloud {self._cloud.cloud} project list --domain {self.name} --format json'
+        cmd = f'openstack --os-cloud {self._cloud.name} project list --domain {self.name} --format json'
         results = run(cmd)
         projects = json.loads(results.out)
         out = EntityList()
@@ -96,7 +96,7 @@ class Domain:
         ]
         """
         from myos.user import User
-        cmd = f'openstack --os-cloud {self._cloud.cloud} user list --domain {self.name} --format json'
+        cmd = f'openstack --os-cloud {self._cloud.name} user list --domain {self.name} --format json'
         results = run(cmd)
         out = EntityList()
         users = json.loads(results.out)

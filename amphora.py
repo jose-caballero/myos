@@ -45,7 +45,7 @@ class Amphora:
         self._data_d = {}
 
     def _get_data(self):
-        cmd = f'openstack --os-cloud {self._cloud.cloud} loadbalancer amphora show {self._id} -f json'
+        cmd = f'openstack --os-cloud {self._cloud.name} loadbalancer amphora show {self._id} -f json'
         results = run(cmd)
         self._data_d = json.loads(results.out)
 

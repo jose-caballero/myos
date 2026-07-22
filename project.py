@@ -17,9 +17,9 @@ class Project:
 
     def _get_data(self):
         if self._name:
-            cmd = f'openstack --os-cloud {self._cloud.cloud} project show "{self._name}" -f json'
+            cmd = f'openstack --os-cloud {self._cloud.name} project show "{self._name}" -f json'
         else:
-            cmd = f'openstack --os-cloud {self._cloud.cloud} project show {self._id} -f json'
+            cmd = f'openstack --os-cloud {self._cloud.name} project show {self._id} -f json'
         results = run(cmd)
         self._data_d = json.loads(results.out)
 
@@ -91,7 +91,7 @@ class Project:
         | 23c7d1b6-ff4c-405b-b71c-42060ab22312 | force-live-control-plane-bk6dl    | ACTIVE | portal-internal=192.168.3.231 |       | l3.micro | 5b37be0037c94b69a35e72cb2da8b016 |
         +--------------------------------------+-----------------------------------+--------+-------------------------------+-------+----------+----------------------------------+
 
-        $ openstack --os-cloud {self._cloud.cloud} server list --project Condor --format json
+        $ openstack --os-cloud {self._cloud.name} server list --project Condor --format json
         [
           {
             "ID": "e2951a59-e290-430f-8f12-1fa4168c3024",
@@ -110,7 +110,7 @@ class Project:
           ...
         """
         from myos.server import Server
-        cmd = f'openstack --os-cloud {self._cloud.cloud} server list --project {self.name} --format json'
+        cmd = f'openstack --os-cloud {self._cloud.name} server list --project {self.name} --format json'
         results = run(cmd)
         servers_l = json.loads(results.out)
         out = EntityList()
@@ -140,7 +140,7 @@ class Project:
         ]
         """
         from myos.user import User
-        cmd = f'openstack --os-cloud {self._cloud.cloud} role assignment list --project {self.name} --names --format json'
+        cmd = f'openstack --os-cloud {self._cloud.name} role assignment list --project {self.name} --names --format json'
         results = run(cmd)
         users_l = json.loads(results.out)
         out = EntityList()
@@ -167,7 +167,7 @@ class Project:
         ]        
         """
         from myos.ip import FloatingIP
-        cmd = f'openstack --os-cloud {self._cloud.cloud} floating ip list --project {self.name} --format json'
+        cmd = f'openstack --os-cloud {self._cloud.name} floating ip list --project {self.name} --format json'
         results = run(cmd)
         fip_l = json.loads(results.out)
         out = EntityList()
@@ -192,7 +192,7 @@ class Project:
         ]
         """
         from myos.volume import Volume
-        cmd = f'openstack --os-cloud {self._cloud.cloud} volume list --project {self.name} --format json -c ID'
+        cmd = f'openstack --os-cloud {self._cloud.name} volume list --project {self.name} --format json -c ID'
         results = run(cmd)
         volume_l = json.loads(results.out)
         out = EntityList()
@@ -220,7 +220,7 @@ class Project:
         ]
         """
         from myos.image import Image
-        cmd = f'openstack --os-cloud {self._cloud.cloud} image list --project {self.name} --format json -c ID'
+        cmd = f'openstack --os-cloud {self._cloud.name} image list --project {self.name} --format json -c ID'
         results = run(cmd)
         image_l = json.loads(results.out)
         out = EntityList()
@@ -247,7 +247,7 @@ class Project:
         ]
         """
         from myos.flavor import Flavor
-        cmd = f'openstack --os-cloud {self._cloud.cloud} flavor list --os-project-id {self.id} --format json -c ID'
+        cmd = f'openstack --os-cloud {self._cloud.name} flavor list --os-project-id {self.id} --format json -c ID'
         results = run(cmd)
         flavor_l = json.loads(results.out)
         out = EntityList()
@@ -260,14 +260,14 @@ class Project:
     @property
     def quotas(self):
         from myos.quota import Quota
-        cmd = f'openstack --os-cloud {self._cloud.cloud} quota show {self.name} --format json'
+        cmd = f'openstack --os-cloud {self._cloud.name} quota show {self.name} --format json'
         results = run(cmd)
         return Quota(json.loads(results.out))
 
     @property
     def shared_quotas(self):
         from myos.quota import SharedQuota
-        cmd = f'openstack --os-cloud {self._cloud.cloud} share quota show {self.name} --format json'
+        cmd = f'openstack --os-cloud {self._cloud.name} share quota show {self.name} --format json'
         results = run(cmd)
         return SharedQuota(json.loads(results.out))
 
@@ -313,7 +313,7 @@ class Project:
         #    --user 69669657eb53642a96b6a03cf27fb47b9fef0f863da0e5ca285c724c91c50e47 
         #    --project f2ae44b03b3742d0808c6197b76b0e5e 
         #    --user-domain stfc
-        cmd = f'openstack --os-cloud {self._cloud.cloud} role add --user {user.id} --project {self.name} --user-domain {user.domain.name} user'
+        cmd = f'openstack --os-cloud {self._cloud.name} role add --user {user.id} --project {self.name} --user-domain {user.domain.name} user'
         results = run(cmd)
 
     def _add_user_group(self, group):
@@ -323,27 +323,27 @@ class Project:
         # --group 43eba3ef7244a53f90f5d114fbf3f3ce0578a08f430aca380ff597d6a40381b3 
         # --group-domain jasmin 
         # user
-        cmd = f'openstack --os-cloud {self._cloud.cloud} role add --project {self.id} --group {group.id} --group-domain {group.domain.id} user'
+        cmd = f'openstack --os-cloud {self._cloud.name} role add --project {self.id} --group {group.id} --group-domain {group.domain.id} user'
         results = run(cmd)
 
     def _add_flavor(self, flavor):
         # command:
         #  openstack flavor set --project <project_name_or_UID> <flavor_name>
-        cmd = f'openstack --os-cloud {self._cloud.cloud} flavor set --project {self.name} {flavor.name}'
+        cmd = f'openstack --os-cloud {self._cloud.name} flavor set --project {self.name} {flavor.name}'
         results = run(cmd)
 
     def _remove_user(self, user):
-        cmd = f'openstack --os-cloud {self._cloud.cloud} role remove --user {user.id} --project {self.name} --user-domain {user.domain.name} user'
+        cmd = f'openstack --os-cloud {self._cloud.name} role remove --user {user.id} --project {self.name} --user-domain {user.domain.name} user'
         results = run(cmd)
 
     def _remove_flavor(self, flavor):
         # command:
         #  openstack flavor unset --project <project_name_or_UID> <flavor_name>
-        cmd = f'openstack --os-cloud {self._cloud.cloud} flavor unset --project {self.name} {flavor.name}'
+        cmd = f'openstack --os-cloud {self._cloud.name} flavor unset --project {self.name} {flavor.name}'
         results = run(cmd)
 
     def _set_quota(self, resource, value):
-        cmd = f'openstack --os-cloud {self._cloud.cloud} quota set --{resource} {value} {self.id}'
+        cmd = f'openstack --os-cloud {self._cloud.name} quota set --{resource} {value} {self.id}'
         results = run(cmd)
 
 

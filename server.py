@@ -20,15 +20,15 @@ class Server:
         self._data_d = {}
 
     def _get_id_from_ip(self):
-        cmd = f'openstack --os-cloud {self._cloud.cloud} server list --all-projects --ip {self._ip} -f value -c ID'
+        cmd = f'openstack --os-cloud {self._cloud.name} server list --all-projects --ip {self._ip} -f value -c ID'
         results = run(cmd)
         return results.out
 
     def _get_data(self):
         if self._name:
-            cmd = f'openstack --os-cloud {self._cloud.cloud} server show {self._name} -f json'
+            cmd = f'openstack --os-cloud {self._cloud.name} server show {self._name} -f json'
         if self._id:
-            cmd = f'openstack --os-cloud {self._cloud.cloud} server show {self._id} -f json'
+            cmd = f'openstack --os-cloud {self._cloud.name} server show {self._id} -f json'
         results = run(cmd)
         self._data_d = json.loads(results.out)
 
@@ -172,7 +172,7 @@ class Server:
             +--------------------------------------+-----------------------------------------------------------------+--------+
         """
         from myos.image import Image
-        cmd = f'openstack --os-cloud {self._cloud.cloud} image list --property instance_uuid="{self.id}" --property image_type="snapshot" -f value -c ID'
+        cmd = f'openstack --os-cloud {self._cloud.name} image list --property instance_uuid="{self.id}" --property image_type="snapshot" -f value -c ID'
         results = run(cmd)
         out = EntityList()
         for image_id in results.out.split():
@@ -186,7 +186,7 @@ class Server:
     @property
     def seconds_in_current_state(self):
         import openstack
-        conn = openstack.connect(cloud=self._cloud.cloud)
+        conn = openstack.connect(cloud=self._cloud.name)
         events = list(conn.compute.server_actions(self.id))
         last_event = events[0]
         last_event_t = last_event.start_time
@@ -204,7 +204,7 @@ class Server:
         """
         restarts this Server when it is in status SHUTOFF
         """
-        cmd = f'openstack --os-cloud {self._cloud.cloud} server start {self.id}'
+        cmd = f'openstack --os-cloud {self._cloud.name} server start {self.id}'
         results = run(cmd)
         return results.out
 
@@ -212,7 +212,7 @@ class Server:
         """
         stops this Server when it is in status ACTIVE
         """
-        cmd = f'openstack --os-cloud {self._cloud.cloud} server stop {self.id}'
+        cmd = f'openstack --os-cloud {self._cloud.name} server stop {self.id}'
         results = run(cmd)
         return results.out
 

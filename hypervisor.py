@@ -22,9 +22,9 @@ class Hypervisor:
 
     def _get_data(self):
         if self._name:
-            cmd = f'openstack --os-cloud {self._cloud.cloud} hypervisor show {self._name} --format json'
+            cmd = f'openstack --os-cloud {self._cloud.name} hypervisor show {self._name} --format json'
         if self._id:
-            cmd = f'openstack --os-cloud {self._cloud.cloud} hypervisor show {self._id} --format json'
+            cmd = f'openstack --os-cloud {self._cloud.name} hypervisor show {self._id} --format json'
         results = run(cmd)
         self._data_d = json.loads(results.out)
 
@@ -129,7 +129,7 @@ class Hypervisor:
         ]
         """
         from myos.server import Server
-        cmd = f'openstack --os-cloud {self._cloud.cloud} server list --host {self.name} --all-projects --format json'
+        cmd = f'openstack --os-cloud {self._cloud.name} server list --host {self.name} --all-projects --format json'
         results = run(cmd)
         servers_l = json.loads(results.out)
         out = EntityList()
@@ -150,7 +150,7 @@ class Hypervisor:
         example:
             openstack --os-cloud admin compute service set --enable hv399.nubes.rl.ac.uk nova-compute
         """
-        cmd = f'openstack --os-cloud {self._cloud.cloud} compute service set --enable {self.name} nova-compute'
+        cmd = f'openstack --os-cloud {self._cloud.name} compute service set --enable {self.name} nova-compute'
         results = run(cmd)
         return results
 
@@ -161,7 +161,7 @@ class Hypervisor:
         example:
             openstack --os-cloud admin compute service set --disable hv399.nubes.rl.ac.uk nova-compute
         """
-        cmd = f'openstack --os-cloud {self._cloud.cloud} compute service set --disable {self.name} --disable-reason {reason} nova-compute'
+        cmd = f'openstack --os-cloud {self._cloud.name} compute service set --disable {self.name} --disable-reason {reason} nova-compute'
         results = run(cmd)
         return results
 
